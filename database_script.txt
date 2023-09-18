@@ -1,0 +1,76 @@
+-- Create the Members Table
+CREATE TABLE Members (
+    member_id SERIAL PRIMARY KEY,
+    full_name VARCHAR(255) NOT NULL,
+   phone_number VARCHAR(20)  NOT NULL
+);
+
+-- Create the Sessions Table
+CREATE TABLE Sessions (
+    session_id SERIAL PRIMARY KEY,
+    member_id INT REFERENCES Members(member_id) NOT NULL,
+    entry_date DATE NOT NULL,
+    exit_date Date
+);
+
+-- Create the Authors Table
+CREATE TABLE Authors (
+    author_id SERIAL PRIMARY KEY,
+    full_name VARCHAR(255) NOT NULL
+);
+
+-- Create the Genres Table
+CREATE TABLE Genres (
+    genre_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL
+);
+
+-- Create the Books Table
+CREATE TABLE Books (
+    book_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL
+);
+
+-- Create the BorrowedBooks Table (Many-to-Many Relationship)
+CREATE TABLE BorrowedBooks (
+    borrow_id SERIAL PRIMARY KEY,
+    member_id INT REFERENCES Members(member_id) NOT NULL,
+    book_id INT REFERENCES Books(book_id) NOT NULL,
+	session_id INT REFERENCES Sessions(session_id) NOT NULL,
+	borrow_time TIMESTAMP NOT NULL,
+    return_time TIMESTAMP
+);
+
+CREATE TABLE BooksAuthors (
+  book_id INT REFERENCES Books(book_id) NOT NULL,
+  author_id INT REFERENCES Authors(author_id) NOT NULL
+);
+CREATE TABLE BooksGenres (
+  book_id INT REFERENCES Books(book_id) NOT NULL,
+  genre_id INT REFERENCES Genres(genre_id) NOT NULL
+);
+
+-- Insert records into the Members Table
+INSERT INTO Members (member_id, full_name, phone_number)
+VALUES (1, 'Yessenbay Assel', '+77472664706'),
+       (2, 'Rustembek Assima', '+77772224569');
+
+-- Insert records into the Authors Table
+INSERT INTO Authors (author_id, full_name)
+VALUES (1, 'Eiichiro Oda'), (2, 'Jack London');
+
+-- Insert records into the Genres Table
+INSERT INTO Genres (genre_id, title)
+VALUES (1, 'Comics'), (2, 'Fiction'), (3, 'Adventure');
+
+-- Insert records into the Books Table
+INSERT INTO Books (book_id, title)
+VALUES (1, 'One Piece'), (2, 'Martin Eden');
+
+-- Insert records into the BooksAuthors Table
+INSERT INTO BooksAuthors (book_id, author_id)
+VALUES (1, 1), (2, 2);
+
+-- Insert records into the BooksGenres Table
+INSERT INTO BooksGenres (book_id, genre_id)
+VALUES (1, 1), (1, 3), (2, 2);
